@@ -1,0 +1,2 @@
+/home/maxence/Dev/cour m2/VRAR/projetct_vr/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/CMakeLists.txt
+/home/maxence/Dev/cour m2/VRAR/projetct_vr/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/CMakeLists.txt
