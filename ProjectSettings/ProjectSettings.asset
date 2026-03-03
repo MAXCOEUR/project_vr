@@ -146,10 +146,6 @@ PlayerSettings:
   bundleVersion: 0.1.0
   preloadedAssets:
   - {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  - {fileID: 4800000, guid: c9f956787b1d945e7b36e0516201fc76, type: 3}
-  - {fileID: 4800000, guid: 0945859e5a1034c2cb6dce53cb4fb899, type: 3}
-  - {fileID: -3235373208850107853, guid: cbffe1df7e6f1f610acbc91d2b78f0e9, type: 2}
-  - {fileID: 11400000, guid: f4a4820a75b992d5a8968b15c487c429, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -935,11 +931,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: 9ffb67b1-caff-49ea-b38c-1b568b25319d
+  cloudProjectId: 0511ed82-17eb-4852-86a8-67bac8c89840
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: projetct_vr
-  organizationId: unity_e6d17f93d844fd9cc129
+  projectName: tp_ynov_AMGS
+  organizationId: ynov_amgs
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
