@@ -1,6 +1,7 @@
 # Unity .gitignore Template - Updated 2025
 
 # Unity generated files
+.vs/
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/

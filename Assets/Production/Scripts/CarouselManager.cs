@@ -7,14 +7,17 @@ using TMPro;
 
 public class CarouselManager : MonoBehaviour
 {
+    // Instance statique pour le Singleton
+    public static CarouselManager Instance;
+
     [System.Serializable]
     public class CategoryData
     {
         [HideInInspector] public string categoryName;
-        public List<Sprite> levelIcons; 
-        public List<GameObject> levels;  
-        [HideInInspector] public int currentLevelIndex = 0; 
-        [HideInInspector] public GameObject spawnedInstance; 
+        public List<Sprite> levelIcons;
+        public List<GameObject> levels;
+        [HideInInspector] public int currentLevelIndex = 0;
+        [HideInInspector] public GameObject spawnedInstance;
     }
 
     [Header("Progression Data")]
@@ -27,24 +30,31 @@ public class CarouselManager : MonoBehaviour
     private CategoryData activeCategory;
 
     [Header("UI References")]
-    public Image displayImage;      
-    public TMP_Text categoryTitleText;  
+    public Image displayImage;
+    public TMP_Text categoryTitleText;
     public TMP_Text levelText;
-    public GameObject spawnButton;      
-    public GameObject globalNextButton; 
+    public GameObject spawnButton;
+    public GameObject globalNextButton;
 
     [Header("Toggle Preview Settings")]
-    public Image previewButtonImage;   // Glisse le bouton lui-même ici
-    public TMP_Text previewButtonText; // Glisse le texte du bouton ici
+    public Image previewButtonImage;
+    public TMP_Text previewButtonText;
     public Color onColor = Color.green;
     public Color offColor = Color.red;
 
     [Header("AR Settings")]
     public ARRaycastManager raycastManager;
-    
-    private GameObject previewModel; 
-    private bool isPreviewEnabled = true; 
+
+    private GameObject previewModel;
+    private bool isPreviewEnabled = true;
     static List<ARRaycastHit> hits = new List<ARRaycastHit>();
+
+    void Awake()
+    {
+        // Initialisation du Singleton
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
 
     void OnValidate()
     {
@@ -53,8 +63,8 @@ public class CarouselManager : MonoBehaviour
         rockCategory.categoryName = "Rocher";
     }
 
-    void Start() 
-    { 
+    void Start()
+    {
         if (allCategories.Count == 0)
         {
             allCategories.Add(houseCategory);
@@ -64,8 +74,7 @@ public class CarouselManager : MonoBehaviour
 
         LoadUserLevelsFromDB();
         UpdateActiveCategory();
-        
-        // Initialisation du bouton Toggle
+
         if (globalNextButton != null) globalNextButton.SetActive(false);
         if (previewButtonImage != null) previewButtonImage.color = onColor;
         if (previewButtonText != null) previewButtonText.text = "Preview: ON";
@@ -74,7 +83,6 @@ public class CarouselManager : MonoBehaviour
     public void TogglePreview()
     {
         isPreviewEnabled = !isPreviewEnabled;
-
         if (isPreviewEnabled)
         {
             if (previewButtonImage != null) previewButtonImage.color = onColor;
@@ -118,9 +126,7 @@ public class CarouselManager : MonoBehaviour
     void UpdatePreviewPosition()
     {
         if (raycastManager == null || activeCategory == null || activeCategory.levels.Count == 0) return;
-
         Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
-
         if (raycastManager.Raycast(screenCenter, hits, TrackableType.PlaneWithinPolygon))
         {
             Pose hitPose = hits[0].pose;
@@ -128,13 +134,10 @@ public class CarouselManager : MonoBehaviour
             {
                 GameObject prefab = activeCategory.levels[activeCategory.currentLevelIndex];
                 previewModel = Instantiate(prefab, hitPose.position, hitPose.rotation);
-                
-                // ON DIT QUE C'EST UN SHADOW
                 ARIdentity id = previewModel.AddComponent<ARIdentity>();
                 id.isShadow = true;
                 id.category = activeCategory.categoryName;
                 id.level = activeCategory.currentLevelIndex;
-
                 ApplyShadowEffect(previewModel, 0.2f);
             }
             previewModel.transform.position = hitPose.position;
@@ -150,12 +153,10 @@ public class CarouselManager : MonoBehaviour
         {
             GameObject prefab = activeCategory.levels[activeCategory.currentLevelIndex];
             activeCategory.spawnedInstance = Instantiate(prefab, previewModel.transform.position, previewModel.transform.rotation);
-            
-            // ON DIT QUE C'EST LE VRAI OBJET
             ARIdentity id = activeCategory.spawnedInstance.AddComponent<ARIdentity>();
             id.isShadow = false;
             id.category = activeCategory.categoryName;
-
+            id.level = activeCategory.currentLevelIndex; // Important pour l'upgrade futur
             previewModel.SetActive(false);
             NextCategory();
         }
@@ -189,13 +190,10 @@ public class CarouselManager : MonoBehaviour
         {
             if (displayImage != null && activeCategory.levelIcons.Count > activeCategory.currentLevelIndex)
                 displayImage.sprite = activeCategory.levelIcons[activeCategory.currentLevelIndex];
-
             categoryTitleText.text = activeCategory.categoryName;
             levelText.text = "Niveau " + (activeCategory.currentLevelIndex + 1);
-
             bool alreadySpawned = activeCategory.spawnedInstance != null;
             bool everythingPlaced = AreAllItemsPlaced();
-
             if (spawnButton != null) spawnButton.SetActive(!alreadySpawned);
             if (globalNextButton != null) globalNextButton.SetActive(everythingPlaced);
         }
@@ -207,10 +205,10 @@ public class CarouselManager : MonoBehaviour
         {
             foreach (Material m in r.materials)
             {
-                m.SetFloat("_Surface", 1); 
+                m.SetFloat("_Surface", 1);
                 m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                 m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                m.SetInt("_ZWrite", 0); 
+                m.SetInt("_ZWrite", 0);
                 m.renderQueue = 3000;
                 m.EnableKeyword("_ALPHABLEND_ON");
                 string prop = m.HasProperty("baseColorFactor") ? "baseColorFactor" : (m.HasProperty("_BaseColor") ? "_BaseColor" : "_Color");
@@ -221,7 +219,7 @@ public class CarouselManager : MonoBehaviour
 
     void LoadUserLevelsFromDB()
     {
-        houseCategory.currentLevelIndex = 0; 
+        houseCategory.currentLevelIndex = 0;
         treeCategory.currentLevelIndex = 0;
         rockCategory.currentLevelIndex = 0;
     }
