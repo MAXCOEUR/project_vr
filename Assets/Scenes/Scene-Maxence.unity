@@ -1366,7 +1366,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7177743849371551920, guid: a470c5783ea03f1bd85d2d8f81a5ec29, type: 3}
       propertyPath: m_UiScaleMode
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7177743849371551920, guid: a470c5783ea03f1bd85d2d8f81a5ec29, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7177743849371551920, guid: a470c5783ea03f1bd85d2d8f81a5ec29, type: 3}
       propertyPath: m_ReferenceResolution.x
