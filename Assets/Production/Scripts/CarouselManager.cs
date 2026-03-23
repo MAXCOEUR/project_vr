@@ -128,6 +128,12 @@ public class CarouselManager : MonoBehaviour
             {
                 GameObject prefab = activeCategory.levels[activeCategory.currentLevelIndex];
                 previewModel = Instantiate(prefab, hitPose.position, hitPose.rotation);
+                
+                // ON DIT QUE C'EST UN SHADOW
+                ARIdentity id = previewModel.AddComponent<ARIdentity>();
+                id.isShadow = true;
+                id.category = activeCategory.categoryName;
+
                 ApplyShadowEffect(previewModel, 0.2f);
             }
             previewModel.transform.position = hitPose.position;
@@ -143,6 +149,12 @@ public class CarouselManager : MonoBehaviour
         {
             GameObject prefab = activeCategory.levels[activeCategory.currentLevelIndex];
             activeCategory.spawnedInstance = Instantiate(prefab, previewModel.transform.position, previewModel.transform.rotation);
+            
+            // ON DIT QUE C'EST LE VRAI OBJET
+            ARIdentity id = activeCategory.spawnedInstance.AddComponent<ARIdentity>();
+            id.isShadow = false;
+            id.category = activeCategory.categoryName;
+
             previewModel.SetActive(false);
             NextCategory();
         }

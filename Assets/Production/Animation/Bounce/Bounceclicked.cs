@@ -24,14 +24,25 @@ public class Bounceclicked : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.transform == transform)
+                    ARIdentity identity = hit.transform.GetComponentInParent<ARIdentity>();
+                    if (identity != null)
                     {
-                        clickCount++; 
-                        Debug.Log(gameObject.name + " clics : " + clickCount);
+                        if (identity.isShadow) 
+                        {
+                            Debug.Log("On ne peut pas récolter sur un fantôme !");
+                        }
+                        else 
+                        {
+                            if (hit.transform == transform)
+                            {
+                                clickCount++; 
+                                Debug.Log(gameObject.name + " clics : " + clickCount);
 
-                        anim.SetTrigger("Bounceclicked");
+                                anim.SetTrigger("Bounceclicked");
 
-                        CheckActions();
+                                CheckActions();
+                            }
+                        }
                     }
                 }
             }
