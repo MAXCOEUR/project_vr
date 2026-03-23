@@ -12,9 +12,14 @@ extern void Ar_Interactor_Update_mC0AEF3A94FA1EBF767E7DF88338D2C90F276A845 (void
 extern void Ar_Interactor_InstantiateObject_m874ABD4BCA8679094C6250758E68F5DBF7084588 (void);
 extern void Ar_Interactor__ctor_m489C99BCC0C3262471E3108794BC30D5BE0A43E1 (void);
 extern void CarouselManager_Start_m313AF893A56549C1D0CBD8000BB4DC1B55A063AC (void);
+extern void CarouselManager_Update_m1A0BCF947CD571E0B85FEDC46DE6C57AEA1E5093 (void);
+extern void CarouselManager_TogglePreview_m33FA68049D21380AE7E27E2C9FA0EB13FED01618 (void);
+extern void CarouselManager_UpdatePreviewPosition_mB45BF677FDE2D309CA678D469F4F0983D6A10477 (void);
+extern void CarouselManager_SpawnInAR_m88BFFA4E0A01FC4D606E5D9A1D95C51C1EFCF83E (void);
 extern void CarouselManager_Next_m491DE355BD1FE145A1D3E44DF56811D4B7A0CE8F (void);
 extern void CarouselManager_Previous_mA9ED0BA21F5832FCAE38845094060B3A4852E206 (void);
-extern void CarouselManager_SpawnInAR_m88BFFA4E0A01FC4D606E5D9A1D95C51C1EFCF83E (void);
+extern void CarouselManager_ChangeItem_m076D549B0E0ED92CF6F23974288EA3420B21182C (void);
+extern void CarouselManager_ApplyShadowEffect_m1796B1A1D7BB14696BFCF72CBAF7A650849BFD82 (void);
 extern void CarouselManager_UpdateUI_mEA5295D81FA5D1D5C447A6A4901D293C5AA52113 (void);
 extern void CarouselManager__ctor_m4D3F2C90942FF4DD05EF13277E9E9A7DCB089097 (void);
 extern void CarouselManager__cctor_m3ADA27233AFBB59BBEB2A7909FA6C93EFC10A5D4 (void);
@@ -22,16 +27,21 @@ extern void Readme__ctor_m69C325C4C171DCB0312B646A9034AA91EA8C39C6 (void);
 extern void Section__ctor_m5F732533E4DFC0167D965E5F5DB332E46055399B (void);
 extern void UnitySourceGeneratedAssemblyMonoScriptTypes_v1_Get_mBEB95BEB954BB63E9710BBC7AD5E78C4CB0A0033 (void);
 extern void UnitySourceGeneratedAssemblyMonoScriptTypes_v1__ctor_mE70FB23ACC1EA12ABC948AA22C2E78B2D0AA39B1 (void);
-static Il2CppMethodPointer s_methodPointers[15] = 
+static Il2CppMethodPointer s_methodPointers[20] = 
 {
 	Ar_Interactor_Start_m2FF3A4D358BA308EE1854903D51DAA17464E46E1,
 	Ar_Interactor_Update_mC0AEF3A94FA1EBF767E7DF88338D2C90F276A845,
 	Ar_Interactor_InstantiateObject_m874ABD4BCA8679094C6250758E68F5DBF7084588,
 	Ar_Interactor__ctor_m489C99BCC0C3262471E3108794BC30D5BE0A43E1,
 	CarouselManager_Start_m313AF893A56549C1D0CBD8000BB4DC1B55A063AC,
+	CarouselManager_Update_m1A0BCF947CD571E0B85FEDC46DE6C57AEA1E5093,
+	CarouselManager_TogglePreview_m33FA68049D21380AE7E27E2C9FA0EB13FED01618,
+	CarouselManager_UpdatePreviewPosition_mB45BF677FDE2D309CA678D469F4F0983D6A10477,
+	CarouselManager_SpawnInAR_m88BFFA4E0A01FC4D606E5D9A1D95C51C1EFCF83E,
 	CarouselManager_Next_m491DE355BD1FE145A1D3E44DF56811D4B7A0CE8F,
 	CarouselManager_Previous_mA9ED0BA21F5832FCAE38845094060B3A4852E206,
-	CarouselManager_SpawnInAR_m88BFFA4E0A01FC4D606E5D9A1D95C51C1EFCF83E,
+	CarouselManager_ChangeItem_m076D549B0E0ED92CF6F23974288EA3420B21182C,
+	CarouselManager_ApplyShadowEffect_m1796B1A1D7BB14696BFCF72CBAF7A650849BFD82,
 	CarouselManager_UpdateUI_mEA5295D81FA5D1D5C447A6A4901D293C5AA52113,
 	CarouselManager__ctor_m4D3F2C90942FF4DD05EF13277E9E9A7DCB089097,
 	CarouselManager__cctor_m3ADA27233AFBB59BBEB2A7909FA6C93EFC10A5D4,
@@ -40,7 +50,7 @@ static Il2CppMethodPointer s_methodPointers[15] =
 	UnitySourceGeneratedAssemblyMonoScriptTypes_v1_Get_mBEB95BEB954BB63E9710BBC7AD5E78C4CB0A0033,
 	UnitySourceGeneratedAssemblyMonoScriptTypes_v1__ctor_mE70FB23ACC1EA12ABC948AA22C2E78B2D0AA39B1,
 };
-static const int32_t s_InvokerIndices[15] = 
+static const int32_t s_InvokerIndices[20] = 
 {
 	16346,
 	16346,
@@ -50,6 +60,11 @@ static const int32_t s_InvokerIndices[15] =
 	16346,
 	16346,
 	16346,
+	16346,
+	16346,
+	16346,
+	12350,
+	6233,
 	16346,
 	16346,
 	28085,
@@ -62,7 +77,7 @@ IL2CPP_EXTERN_C const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule;
 const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule = 
 {
 	"Assembly-CSharp.dll",
-	15,
+	20,
 	s_methodPointers,
 	0,
 	NULL,
