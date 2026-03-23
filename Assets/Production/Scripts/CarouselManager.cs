@@ -3,52 +3,111 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using TMPro;
 
 public class CarouselManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class CategoryData
+    {
+        [HideInInspector] public string categoryName;
+        public List<Sprite> levelIcons; 
+        public List<GameObject> levels;  
+        [HideInInspector] public int currentLevelIndex = 0; 
+    }
+
+    [Header("Progression Data")]
+    public CategoryData houseCategory;
+    public CategoryData treeCategory;
+    public CategoryData rockCategory;
+
+    // --- NOUVEAU : GESTION DE LA NAVIGATION ---
+    private List<CategoryData> allCategories = new List<CategoryData>();
+    private int currentCategoryIndex = 0;
+    private CategoryData activeCategory;
+
     [Header("UI References")]
-    public Image displayImage;
-    public Text displayText;
-    public Toggle previewToggle; // Optionnel : pour lier à un Toggle UI
+    public Image displayImage;      
+    public TMP_Text categoryTitleText;  
+    public TMP_Text levelText;          
 
     [Header("AR Settings")]
     public ARRaycastManager raycastManager;
-
-    [System.Serializable]
-    public struct ItemData
-    {
-        public string name;
-        public Sprite icon;
-        public GameObject modelPrefab;
-    }
-
-    public List<ItemData> items;
-    private int currentIndex = 0;
     
     private GameObject previewModel; 
-    private bool isPreviewActive = true; // Contrôle si on affiche l'ombre ou pas
+    private bool isPreviewActive = true;
     static List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
-    void Start() { UpdateUI(); }
+    void OnValidate()
+    {
+        houseCategory.categoryName = "Maison";
+        treeCategory.categoryName = "Arbre";
+        rockCategory.categoryName = "Rocher";
+    }
+
+    void Start() 
+    { 
+        // Initialisation de la liste des catégories pour la navigation
+        allCategories.Add(houseCategory);
+        allCategories.Add(treeCategory);
+        allCategories.Add(rockCategory);
+
+        LoadUserLevelsFromDB();
+        
+        // On définit la catégorie de départ (index 0 = Maison)
+        UpdateActiveCategory();
+    }
+
+    // --- NOUVELLES FONCTIONS DE NAVIGATION ---
+
+    public void NextCategory()
+    {
+        currentCategoryIndex = (currentCategoryIndex + 1) % allCategories.Count;
+        UpdateActiveCategory();
+    }
+
+    public void PreviousCategory()
+    {
+        currentCategoryIndex--;
+        if (currentCategoryIndex < 0) currentCategoryIndex = allCategories.Count - 1;
+        UpdateActiveCategory();
+    }
+
+    private void UpdateActiveCategory()
+    {
+        activeCategory = allCategories[currentCategoryIndex];
+        RefreshPreview();
+        UpdateUI();
+    }
+
+    // Gardé au cas où tu as besoin de cliquer sur un bouton spécifique
+    public void SelectCategory(string name)
+    {
+        if (name == "House") currentCategoryIndex = 0;
+        else if (name == "Tree") currentCategoryIndex = 1;
+        else if (name == "Rock") currentCategoryIndex = 2;
+
+        UpdateActiveCategory();
+    }
+
+    // ------------------------------------------
+
+    void LoadUserLevelsFromDB()
+    {
+        houseCategory.currentLevelIndex = 0; 
+        treeCategory.currentLevelIndex = 0;
+        rockCategory.currentLevelIndex = 0;
+    }
 
     void Update()
     {
-        // On ne gère l'aperçu que si l'option est activée
-        if (isPreviewActive) { UpdatePreviewPosition(); }
-        else if (previewModel != null) { previewModel.SetActive(false); }
-    }
-
-    // --- FONCTION POUR TON BOUTON ON/OFF ---
-    public void TogglePreview()
-    {
-        isPreviewActive = !isPreviewActive;
-        if (!isPreviewActive && previewModel != null) 
-            previewModel.SetActive(false);
+        if (isPreviewActive) UpdatePreviewPosition();
+        else if (previewModel != null) previewModel.SetActive(false);
     }
 
     void UpdatePreviewPosition()
     {
-        if (raycastManager == null || items.Count == 0) return;
+        if (raycastManager == null || activeCategory == null || activeCategory.levels.Count == 0) return;
 
         Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
@@ -58,76 +117,62 @@ public class CarouselManager : MonoBehaviour
 
             if (previewModel == null)
             {
-                previewModel = Instantiate(items[currentIndex].modelPrefab, hitPose.position, hitPose.rotation);
-                ApplyShadowEffect(previewModel, 0.2f); // 40% d'opacité noire
+                GameObject prefab = activeCategory.levels[activeCategory.currentLevelIndex];
+                previewModel = Instantiate(prefab, hitPose.position, hitPose.rotation);
+                ApplyShadowEffect(previewModel, 0.2f);
             }
 
             previewModel.transform.position = hitPose.position;
             previewModel.transform.rotation = hitPose.rotation;
             previewModel.SetActive(true);
         }
-        else
-        {
-            if (previewModel != null) previewModel.SetActive(false);
-        }
+        else if (previewModel != null) previewModel.SetActive(false);
     }
 
     public void SpawnInAR()
     {
-        // On ne spawn que si le preview est visible (donc qu'on a trouvé un sol)
         if (previewModel != null && previewModel.activeSelf)
         {
-            // On instancie le vrai objet (il sera créé avec ses couleurs d'origine)
-            Instantiate(items[currentIndex].modelPrefab, previewModel.transform.position, previewModel.transform.rotation);
+            GameObject prefab = activeCategory.levels[activeCategory.currentLevelIndex];
+            Instantiate(prefab, previewModel.transform.position, previewModel.transform.rotation);
         }
     }
 
-    public void Next() { ChangeItem(1); }
-    public void Previous() { ChangeItem(-1); }
+    void RefreshPreview() { if (previewModel != null) Destroy(previewModel); }
 
-    void ChangeItem(int step)
+    void UpdateUI()
     {
-        if (items.Count == 0) return;
-        currentIndex = (currentIndex + step + items.Count) % items.Count;
-        
-        // Si on change d'item, on détruit l'ancien fantôme pour que le nouveau se crée
-        if (previewModel != null) Destroy(previewModel);
-        
-        UpdateUI();
+        if (activeCategory != null)
+        {
+            if (displayImage != null && activeCategory.levelIcons.Count > activeCategory.currentLevelIndex)
+                displayImage.sprite = activeCategory.levelIcons[activeCategory.currentLevelIndex];
+
+            if (categoryTitleText != null)
+                categoryTitleText.text = activeCategory.categoryName;
+
+            if (levelText != null)
+                levelText.text = "Niveau " + (activeCategory.currentLevelIndex + 1);
+        }
     }
 
-    // --- LA LOGIQUE "OMBRE NOIRE" ---
     void ApplyShadowEffect(GameObject obj, float alpha)
     {
-        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
-        foreach (Renderer r in renderers)
+        foreach (Renderer r in obj.GetComponentsInChildren<Renderer>())
         {
             foreach (Material m in r.materials)
             {
-                // Forcer le mode Transparent
                 m.SetFloat("_Surface", 1); 
                 m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                 m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
                 m.SetInt("_ZWrite", 0); 
-                m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                m.renderQueue = 3000;
                 m.EnableKeyword("_ALPHABLEND_ON");
 
-                // Trouver la propriété de couleur selon le shader (glTF ou Standard)
                 string prop = m.HasProperty("baseColorFactor") ? "baseColorFactor" : 
                              (m.HasProperty("_BaseColor") ? "_BaseColor" : "_Color");
 
-                // Appliquer Noir + Alpha
                 m.SetColor(prop, new Color(0, 0, 0, alpha));
             }
-        }
-    }
-
-    void UpdateUI()
-    {
-        if (items.Count > 0)
-        {
-            if(displayImage != null) displayImage.sprite = items[currentIndex].icon;
-            if(displayText != null) displayText.text = items[currentIndex].name;
         }
     }
 }
