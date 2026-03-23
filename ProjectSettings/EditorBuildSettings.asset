@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Default/Scene_Menu.unity
+    guid: 2dcbb19a5dec3e14ca5d42bc052ed465
+  - enabled: 0
     path: Assets/Scenes/Scene-Maxence.unity
     guid: 6a93ec7309ae4c40d8634eeaf595870a
+  - enabled: 1
+    path: Assets/Scenes/Default/Scene_AR.unity
+    guid: 195d18147d552d64f8eee5d326ffd8cd
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 4a3b1dd4683fbe938a55abed8578902b, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
