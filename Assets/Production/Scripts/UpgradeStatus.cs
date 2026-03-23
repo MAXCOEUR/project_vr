@@ -22,13 +22,11 @@ public class UpgradeStatus : MonoBehaviour
 
     void OnEnable()
     {
-        // On s'abonne à l'événement
         DataHolding.OnResourcesChanged += Refresh;
     }
 
     void OnDisable()
     {
-        // On se désabonne (CRITIQUE pour éviter les erreurs)
         DataHolding.OnResourcesChanged -= Refresh;
     }
     public void Start()
@@ -44,7 +42,6 @@ public class UpgradeStatus : MonoBehaviour
         Refresh();
     }
 
-    // À appeler chaque fois que le joueur gagne une ressource
     public void Refresh()
     {
         int currentWood = DataHolding.Instance.woodCount;
@@ -54,17 +51,14 @@ public class UpgradeStatus : MonoBehaviour
         bool canAffordRock = currentRock >= rockNeeded;
         bool canUpgrade = canAffordWood && canAffordRock;
 
-        // Mise à jour de l'icône de gauche
         statusImage.sprite = canUpgrade ? arrowGreen : crossRed;
 
-        // Mise à jour des couleurs des textes
         woodText.color = canAffordWood ? colorReady : colorMissing;
         rockText.color = canAffordRock ? colorReady : colorMissing;
     }
 
     void Update()
     {
-        // Optionnel : Le panneau regarde toujours le joueur
         if (Camera.main != null)
             transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward,
                              Camera.main.transform.rotation * Vector3.up);
