@@ -14,6 +14,7 @@ public class CarouselManager : MonoBehaviour
         public List<Sprite> levelIcons; 
         public List<GameObject> levels;  
         [HideInInspector] public int currentLevelIndex = 0; 
+        [HideInInspector] public GameObject spawnedInstance; 
     }
 
     [Header("Progression Data")]
@@ -21,7 +22,6 @@ public class CarouselManager : MonoBehaviour
     public CategoryData treeCategory;
     public CategoryData rockCategory;
 
-    // --- NOUVEAU : GESTION DE LA NAVIGATION ---
     private List<CategoryData> allCategories = new List<CategoryData>();
     private int currentCategoryIndex = 0;
     private CategoryData activeCategory;
@@ -29,13 +29,21 @@ public class CarouselManager : MonoBehaviour
     [Header("UI References")]
     public Image displayImage;      
     public TMP_Text categoryTitleText;  
-    public TMP_Text levelText;          
+    public TMP_Text levelText;
+    public GameObject spawnButton;      
+    public GameObject globalNextButton; 
+
+    [Header("Toggle Preview Settings")]
+    public Image previewButtonImage;   // Glisse le bouton lui-même ici
+    public TMP_Text previewButtonText; // Glisse le texte du bouton ici
+    public Color onColor = Color.green;
+    public Color offColor = Color.red;
 
     [Header("AR Settings")]
     public ARRaycastManager raycastManager;
     
     private GameObject previewModel; 
-    private bool isPreviewActive = true;
+    private bool isPreviewEnabled = true; 
     static List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
     void OnValidate()
@@ -47,18 +55,38 @@ public class CarouselManager : MonoBehaviour
 
     void Start() 
     { 
-        // Initialisation de la liste des catégories pour la navigation
-        allCategories.Add(houseCategory);
-        allCategories.Add(treeCategory);
-        allCategories.Add(rockCategory);
+        if (allCategories.Count == 0)
+        {
+            allCategories.Add(houseCategory);
+            allCategories.Add(treeCategory);
+            allCategories.Add(rockCategory);
+        }
 
         LoadUserLevelsFromDB();
-        
-        // On définit la catégorie de départ (index 0 = Maison)
         UpdateActiveCategory();
+        
+        // Initialisation du bouton Toggle
+        if (globalNextButton != null) globalNextButton.SetActive(false);
+        if (previewButtonImage != null) previewButtonImage.color = onColor;
+        if (previewButtonText != null) previewButtonText.text = "Preview: ON";
     }
 
-    // --- NOUVELLES FONCTIONS DE NAVIGATION ---
+    public void TogglePreview()
+    {
+        isPreviewEnabled = !isPreviewEnabled;
+
+        if (isPreviewEnabled)
+        {
+            if (previewButtonImage != null) previewButtonImage.color = onColor;
+            if (previewButtonText != null) previewButtonText.text = "Preview: ON";
+        }
+        else
+        {
+            if (previewButtonImage != null) previewButtonImage.color = offColor;
+            if (previewButtonText != null) previewButtonText.text = "Preview: OFF";
+            if (previewModel != null) previewModel.SetActive(false);
+        }
+    }
 
     public void NextCategory()
     {
@@ -80,28 +108,10 @@ public class CarouselManager : MonoBehaviour
         UpdateUI();
     }
 
-    // Gardé au cas où tu as besoin de cliquer sur un bouton spécifique
-    public void SelectCategory(string name)
-    {
-        if (name == "House") currentCategoryIndex = 0;
-        else if (name == "Tree") currentCategoryIndex = 1;
-        else if (name == "Rock") currentCategoryIndex = 2;
-
-        UpdateActiveCategory();
-    }
-
-    // ------------------------------------------
-
-    void LoadUserLevelsFromDB()
-    {
-        houseCategory.currentLevelIndex = 0; 
-        treeCategory.currentLevelIndex = 0;
-        rockCategory.currentLevelIndex = 0;
-    }
-
     void Update()
     {
-        if (isPreviewActive) UpdatePreviewPosition();
+        bool alreadySpawned = activeCategory.spawnedInstance != null;
+        if (isPreviewEnabled && !alreadySpawned) UpdatePreviewPosition();
         else if (previewModel != null) previewModel.SetActive(false);
     }
 
@@ -114,14 +124,12 @@ public class CarouselManager : MonoBehaviour
         if (raycastManager.Raycast(screenCenter, hits, TrackableType.PlaneWithinPolygon))
         {
             Pose hitPose = hits[0].pose;
-
             if (previewModel == null)
             {
                 GameObject prefab = activeCategory.levels[activeCategory.currentLevelIndex];
                 previewModel = Instantiate(prefab, hitPose.position, hitPose.rotation);
                 ApplyShadowEffect(previewModel, 0.2f);
             }
-
             previewModel.transform.position = hitPose.position;
             previewModel.transform.rotation = hitPose.rotation;
             previewModel.SetActive(true);
@@ -131,11 +139,33 @@ public class CarouselManager : MonoBehaviour
 
     public void SpawnInAR()
     {
-        if (previewModel != null && previewModel.activeSelf)
+        if (previewModel != null && previewModel.activeSelf && activeCategory.spawnedInstance == null)
         {
             GameObject prefab = activeCategory.levels[activeCategory.currentLevelIndex];
-            Instantiate(prefab, previewModel.transform.position, previewModel.transform.rotation);
+            activeCategory.spawnedInstance = Instantiate(prefab, previewModel.transform.position, previewModel.transform.rotation);
+            previewModel.SetActive(false);
+            NextCategory();
         }
+    }
+
+    bool AreAllItemsPlaced()
+    {
+        foreach (var cat in allCategories)
+        {
+            if (cat.spawnedInstance == null) return false;
+        }
+        return true;
+    }
+
+    public void ResetAll()
+    {
+        foreach (var cat in allCategories)
+        {
+            if (cat.spawnedInstance != null) Destroy(cat.spawnedInstance);
+            cat.spawnedInstance = null;
+        }
+        currentCategoryIndex = 0;
+        UpdateActiveCategory();
     }
 
     void RefreshPreview() { if (previewModel != null) Destroy(previewModel); }
@@ -147,11 +177,14 @@ public class CarouselManager : MonoBehaviour
             if (displayImage != null && activeCategory.levelIcons.Count > activeCategory.currentLevelIndex)
                 displayImage.sprite = activeCategory.levelIcons[activeCategory.currentLevelIndex];
 
-            if (categoryTitleText != null)
-                categoryTitleText.text = activeCategory.categoryName;
+            categoryTitleText.text = activeCategory.categoryName;
+            levelText.text = "Niveau " + (activeCategory.currentLevelIndex + 1);
 
-            if (levelText != null)
-                levelText.text = "Niveau " + (activeCategory.currentLevelIndex + 1);
+            bool alreadySpawned = activeCategory.spawnedInstance != null;
+            bool everythingPlaced = AreAllItemsPlaced();
+
+            if (spawnButton != null) spawnButton.SetActive(!alreadySpawned);
+            if (globalNextButton != null) globalNextButton.SetActive(everythingPlaced);
         }
     }
 
@@ -167,12 +200,16 @@ public class CarouselManager : MonoBehaviour
                 m.SetInt("_ZWrite", 0); 
                 m.renderQueue = 3000;
                 m.EnableKeyword("_ALPHABLEND_ON");
-
-                string prop = m.HasProperty("baseColorFactor") ? "baseColorFactor" : 
-                             (m.HasProperty("_BaseColor") ? "_BaseColor" : "_Color");
-
+                string prop = m.HasProperty("baseColorFactor") ? "baseColorFactor" : (m.HasProperty("_BaseColor") ? "_BaseColor" : "_Color");
                 m.SetColor(prop, new Color(0, 0, 0, alpha));
             }
         }
+    }
+
+    void LoadUserLevelsFromDB()
+    {
+        houseCategory.currentLevelIndex = 0; 
+        treeCategory.currentLevelIndex = 0;
+        rockCategory.currentLevelIndex = 0;
     }
 }
