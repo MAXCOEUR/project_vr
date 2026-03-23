@@ -5,7 +5,6 @@ public class Bounceclicked : MonoBehaviour
     [SerializeField] Camera cam;
 
     Animator anim;
-    public int clickCount = 0; 
 
     void Start()
     {
@@ -35,32 +34,29 @@ public class Bounceclicked : MonoBehaviour
                         {
                             if (hit.transform == transform)
                             {
-                                clickCount++; 
-                                Debug.Log(gameObject.name + " clics : " + clickCount);
+                                if(identity.category == "Arbre" || identity.category == "Rocher")
+                                {
+                                    DataHolding.Instance.AddResource(identity.category, 1);
+                                }
+                                else
+                                {
+                                    if (DataHolding.Instance.TrySpendResources(identity.level)) {
+                                        // Le paiement est fait, ici tu déclenches l'évolution visuelle
+                                        Debug.Log("L'amélioration de la maison commence !");
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("Pas assez de ressources pour améliorer la maison !");
+                                    }
+                                }
+                                
 
                                 anim.SetTrigger("Bounceclicked");
-
-                                CheckActions();
                             }
                         }
                     }
                 }
             }
-        }
-    }
-
-    void CheckActions()
-    {
-        if (clickCount == 3)
-        {
-            Debug.Log("3 clics !");
-            transform.localScale *= 1.2f;
-        }
-
-        if (clickCount == 5)
-        {
-            Debug.Log("5 clics !");
-            GetComponent<Renderer>().material.color = Color.red;
         }
     }
 }

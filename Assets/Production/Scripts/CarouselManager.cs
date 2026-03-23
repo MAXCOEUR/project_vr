@@ -133,6 +133,7 @@ public class CarouselManager : MonoBehaviour
                 ARIdentity id = previewModel.AddComponent<ARIdentity>();
                 id.isShadow = true;
                 id.category = activeCategory.categoryName;
+                id.level = activeCategory.currentLevelIndex;
 
                 ApplyShadowEffect(previewModel, 0.2f);
             }
