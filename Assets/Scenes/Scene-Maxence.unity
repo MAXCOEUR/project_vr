@@ -1816,7 +1816,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DataHolding
   upgradeCosts:
   - woodRequired: 10
-    rockRequired: 2
+    rockRequired: 5
   - woodRequired: 20
     rockRequired: 15
   woodCount: 0

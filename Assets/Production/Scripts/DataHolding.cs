@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class DataHolding : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class DataHolding : MonoBehaviour
     public int woodCount = 0;
     public int rockCount = 0;
 
+    public static event Action OnResourcesChanged;
+
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -39,6 +42,7 @@ public class DataHolding : MonoBehaviour
             rockCount += amount;
             Debug.Log("Roche ajoutée ! Total : " + rockCount);
         }
+        OnResourcesChanged?.Invoke();
     }
 
     public bool TrySpendResources(int currentLevel)
@@ -57,6 +61,7 @@ public class DataHolding : MonoBehaviour
             woodCount -= cost.woodRequired;
             rockCount -= cost.rockRequired;
             Debug.Log($"Amélioration Niveau {currentLevel} -> {currentLevel + 1} réussie !");
+            OnResourcesChanged?.Invoke();
             return true;
         }
 
