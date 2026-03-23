@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class starter_houseclicked : MonoBehaviour
+public class Bounceclicked : MonoBehaviour
 {
  [SerializeField]
     Camera cam;
@@ -9,11 +9,14 @@ public class starter_houseclicked : MonoBehaviour
 
     void Start()
     {
+        cam = Camera.main;
         anim = GetComponent<Animator>();
     }
 
     void Update()
     {
+        if(cam != null)
+        {
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
@@ -25,9 +28,10 @@ public class starter_houseclicked : MonoBehaviour
                 {
                     Debug.Log("AAAAAAHHHHH");
 
-                anim.SetTrigger("starter_houseclicked");                   
+                    anim.SetTrigger("Bounceclicked");                   
                 }
             }
         }    
+    }
     }
 }

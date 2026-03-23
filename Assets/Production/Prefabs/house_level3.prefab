@@ -71,5 +71,75 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4357118449180629203, guid: 0fdfc9ea8cb3d804e97d31d2fa0de050, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1826252845195706986}
+    - targetCorrespondingSourceObject: {fileID: 4357118449180629203, guid: 0fdfc9ea8cb3d804e97d31d2fa0de050, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2939125030169168687}
+    - targetCorrespondingSourceObject: {fileID: 4357118449180629203, guid: 0fdfc9ea8cb3d804e97d31d2fa0de050, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5644921914511281855}
   m_SourcePrefab: {fileID: 8686905464242370237, guid: 0fdfc9ea8cb3d804e97d31d2fa0de050, type: 3}
+--- !u!1 &1231711041211372890 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4357118449180629203, guid: 0fdfc9ea8cb3d804e97d31d2fa0de050, type: 3}
+  m_PrefabInstance: {fileID: 3269739285743586697}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &-1826252845195706986
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231711041211372890}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 3, z: 2}
+  m_Center: {x: -1, y: 1, z: 1}
+--- !u!114 &2939125030169168687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231711041211372890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2597ea48952bed544821d18ffc622ad6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Bounceclicked
+  cam: {fileID: 0}
+--- !u!95 &5644921914511281855
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231711041211372890}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 065e0e864d3897f43b962b67494d5211, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
