@@ -6,6 +6,7 @@ public class DataHolding : MonoBehaviour
 {
     public static DataHolding Instance;
 
+public bool housePlaced = false;
     [System.Serializable]
     public struct UpgradeCost
     {

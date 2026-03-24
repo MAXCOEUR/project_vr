@@ -22,6 +22,10 @@ public class CarouselManager : MonoBehaviour
         [HideInInspector] public GameObject spawnedInstance;
     }
 
+    [Header("Character Spawn")]
+    public GameObject characterPrefab;
+    private GameObject spawnedCharacter;
+
     [Header("Progression Data")]
     public CategoryData houseCategory;
     public CategoryData treeCategory;
@@ -191,12 +195,12 @@ public class CarouselManager : MonoBehaviour
             
             id.level = (activeCategory.categoryName == "Maison") ? DataHolding.Instance.houseCurrentLevel : activeCategory.currentLevelIndex;
 
-            previewModel.SetActive(false);
-            NextCategory();
+        previewModel.SetActive(false);
+        NextCategory();
             
             Debug.Log(newRoot.name + " créé avec succès.");
-        }
     }
+}
 
     bool AreAllItemsPlaced()
     {
