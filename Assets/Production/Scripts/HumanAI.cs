@@ -23,7 +23,10 @@ public class HumanAI : MonoBehaviour
         if (GameManager.Instance.HasBear())
         {
             Flee();
-            return;
+        }
+        else
+        {
+            isFleeing = false;
         }
 
         if (isFleeing)
@@ -147,12 +150,9 @@ void MoveToResource()
         if (dir != Vector3.zero)
             transform.forward = dir;
 
-        if (Vector3.Distance(transform.position, house.position) < 1f)
+        if (Vector3.Distance(transform.position, house.position) < 0.01f)
         {
-            if (GameManager.Instance.TryEnterHouse())
-            {
-                Destroy(gameObject);
-            }
+            GameManager.Instance.TryEnterHouse(this.gameObject);
         }
     }
 

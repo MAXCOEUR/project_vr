@@ -27,7 +27,7 @@ public class BearAI : MonoBehaviour
         if (dir != Vector3.zero)
             transform.forward = dir;
 
-        if (Vector3.Distance(transform.position, target.transform.position) < 1f)
+        if (Vector3.Distance(transform.position, target.transform.position) < 0.01f)
         {
             GameManager.Instance.RemoveHuman(target);
             Destroy(target);
