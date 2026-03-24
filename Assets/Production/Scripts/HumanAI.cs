@@ -1,14 +1,17 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HumanAI : MonoBehaviour
 {
     public Transform house;
     public float speed = 2f;
-
+    private Vector3 wanderDir;
+    private float wanderTimer;
     private GameObject targetResource;
     private bool isFleeing = false;
     private bool isFarming = false;
+    private ResourceNode node;
 
     void Start()
     {
@@ -35,55 +38,99 @@ public class HumanAI : MonoBehaviour
         }
         else
         {
+            Wander();
             FindResource();
         }
     }
 
-    void FindResource()
-    {
-        var gm = GameManager.Instance;
+void FindResource()
+{
+    var gm = GameManager.Instance;
 
-        if (Random.value > 0.5f && gm.trees.Count > 0)
-            targetResource = gm.trees[Random.Range(0, gm.trees.Count)];
-        else if (gm.rocks.Count > 0)
-            targetResource = gm.rocks[Random.Range(0, gm.rocks.Count)];
+    targetResource = null;
+    node = null;
+
+    gm.trees.RemoveAll(t => t == null);
+    gm.rocks.RemoveAll(r => r == null);
+
+    List<ResourceNode> available = new List<ResourceNode>();
+
+    foreach (var t in gm.trees)
+    {
+        var n = t.GetComponent<ResourceNode>();
+        if (n != null && !n.isOccupied)
+            available.Add(n);
     }
 
-    void MoveToResource()
+    foreach (var r in gm.rocks)
     {
-        Vector3 dir = (targetResource.transform.position - transform.position).normalized;
-        transform.position += dir * speed * Time.deltaTime;
-
-        if (dir != Vector3.zero)
-            transform.forward = dir;
-
-        if (Vector3.Distance(transform.position, targetResource.transform.position) < 1f)
-        {
-            if (!isFarming)
-                StartCoroutine(FarmRoutine());
-        }
+        var n = r.GetComponent<ResourceNode>();
+        if (n != null && !n.isOccupied)
+            available.Add(n);
     }
+
+    if (available.Count == 0)
+    {
+        return;
+    }
+    node = available[Random.Range(0, available.Count)];
+    targetResource = node.gameObject;
+
+    node.isOccupied = true;
+}
+
+void MoveToResource()
+{
+    if (targetResource == null)
+    {
+        node = null;
+        return;
+    }
+
+    Vector3 dir = (targetResource.transform.position - transform.position).normalized;
+    transform.position += dir * speed * Time.deltaTime;
+
+    if (dir != Vector3.zero)
+        transform.forward = dir;
+
+    if (Vector3.Distance(transform.position, targetResource.transform.position) < 1f)
+    {
+        if (!isFarming)
+            StartCoroutine(FarmRoutine());
+    }
+}
 
     IEnumerator FarmRoutine()
+{
+    isFarming = true;
+
+    while (!GameManager.Instance.HasBear())
     {
-        isFarming = true;
+        yield return new WaitForSeconds(5f);
 
-        while (!GameManager.Instance.HasBear())
+        if (node == null)
+            break;
+
+        switch (node.type)
         {
-            yield return new WaitForSeconds(5f);
-
-            if (targetResource == null) break;
-
-            var node = targetResource.GetComponent<ResourceNode>();
-
-            if (node.type == ResourceNode.Type.Tree)
+            case ResourceNode.Type.Tree:
                 DataHolding.Instance.AddResource("Arbre", 1);
-            else
-                DataHolding.Instance.AddResource("Rocher", 1);
-        }
+                break;
 
-        isFarming = false;
+            case ResourceNode.Type.Rock:
+                DataHolding.Instance.AddResource("Rocher", 1);
+                break;
+        }
     }
+
+    isFarming = false;
+
+    if (node != null)
+        node.isOccupied = false;
+
+    targetResource = null;
+    node = null;
+}
 
     void Flee()
     {
@@ -108,4 +155,25 @@ public class HumanAI : MonoBehaviour
             }
         }
     }
+
+    void Wander()
+{
+    wanderTimer -= Time.deltaTime;
+
+    if (wanderTimer <= 0f)
+    {
+        wanderDir = new Vector3(
+            Random.Range(-1f, 1f),
+            0f,
+            Random.Range(-1f, 1f)
+        ).normalized;
+
+        wanderTimer = Random.Range(2f, 4f);
+    }
+
+    transform.position += wanderDir * speed * 0.5f * Time.deltaTime;
+
+    if (wanderDir != Vector3.zero)
+        transform.forward = wanderDir;
+}
 }

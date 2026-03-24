@@ -158,4 +158,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ae90464058c90d47bd3dc4794f3f7d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceNode
-  type: 0
+  type: 1
+  isOccupied: 0
