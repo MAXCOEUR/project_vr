@@ -22,6 +22,14 @@ public class CarouselManager : MonoBehaviour
         [HideInInspector] public GameObject spawnedInstance;
     }
 
+    [Header("Character Spawn")]
+    public GameObject characterPrefab;
+    private GameObject spawnedCharacter;
+
+    [Header("Bear Spawn")]
+    public GameObject bearPrefab;
+    private GameObject spawnedBear;
+
     [Header("Progression Data")]
     public CategoryData houseCategory;
     public CategoryData treeCategory;
@@ -184,19 +192,48 @@ public class CarouselManager : MonoBehaviour
             }
 
             activeCategory.spawnedInstance = newRoot;
+            if (activeCategory.categoryName == "Maison")
+            {
+                if (characterPrefab != null && spawnedCharacter == null)
+                {
+                    Vector3 offset = new Vector3(1.5f, 0, 0);
+                    Vector3 spawnPos = newRoot.transform.position + offset;
 
+                    spawnedCharacter = Instantiate(characterPrefab, spawnPos, Quaternion.identity);
+
+                    HumanFlee flee = spawnedCharacter.GetComponent<HumanFlee>();
+                    if (flee != null)
+                    {
+                        flee.house = newRoot.transform;
+                    }
+                }
+
+                if (bearPrefab != null && spawnedBear == null)
+                {
+                    Vector3 offset = new Vector3(-2f, 0, -2f);
+                    Vector3 spawnPos = newRoot.transform.position + offset;
+
+                    spawnedBear = Instantiate(bearPrefab, spawnPos, Quaternion.identity);
+
+                    BearChase chase = spawnedBear.GetComponent<BearChase>();
+                    if (chase != null && spawnedCharacter != null)
+                    {
+                        chase.target = spawnedCharacter.transform;
+                    }
+                }
+            }
             ARIdentity id = newRoot.AddComponent<ARIdentity>();
             id.isShadow = false;
             id.category = activeCategory.categoryName;
             
             id.level = (activeCategory.categoryName == "Maison") ? DataHolding.Instance.houseCurrentLevel : activeCategory.currentLevelIndex;
 
-            previewModel.SetActive(false);
-            NextCategory();
+        previewModel.SetActive(false);
+        NextCategory();
             
             Debug.Log(newRoot.name + " créé avec succès.");
-        }
     }
+}
 
     bool AreAllItemsPlaced()
     {
