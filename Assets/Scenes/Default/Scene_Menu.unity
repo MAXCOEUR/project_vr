@@ -900,11 +900,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1369689399392891109, guid: 52491012257902248a78ec8220adb871, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 800
+      value: 556
       objectReference: {fileID: 0}
     - target: {fileID: 1369689399392891109, guid: 52491012257902248a78ec8220adb871, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 700
+      value: 556
       objectReference: {fileID: 0}
     - target: {fileID: 1369689399392891109, guid: 52491012257902248a78ec8220adb871, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -936,11 +936,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2927175418186538159, guid: 52491012257902248a78ec8220adb871, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 320
+      value: 556
       objectReference: {fileID: 0}
     - target: {fileID: 2927175418186538159, guid: 52491012257902248a78ec8220adb871, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 320
+      value: 556
       objectReference: {fileID: 0}
     - target: {fileID: 2927175418186538159, guid: 52491012257902248a78ec8220adb871, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1104,7 +1104,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7615640836553144226, guid: 52491012257902248a78ec8220adb871, type: 3}
       propertyPath: m_Spacing
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7615640836553144226, guid: 52491012257902248a78ec8220adb871, type: 3}
       propertyPath: m_ChildControlWidth
@@ -1163,7 +1163,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 338912693204921959, guid: 52491012257902248a78ec8220adb871, type: 3}
+    - {fileID: 8144442059815434516, guid: 52491012257902248a78ec8220adb871, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5030586565348249052, guid: 52491012257902248a78ec8220adb871, type: 3}
@@ -1181,6 +1183,18 @@ PrefabInstance:
     - target: {fileID: 4801231089886762035, guid: df702082917dc1644b0295582e94881f, type: 3}
       propertyPath: m_Name
       value: Background
+      objectReference: {fileID: 0}
+    - target: {fileID: 5651331755513661955, guid: df702082917dc1644b0295582e94881f, type: 3}
+      propertyPath: m_Color.b
+      value: 0.050980393
+      objectReference: {fileID: 0}
+    - target: {fileID: 5651331755513661955, guid: df702082917dc1644b0295582e94881f, type: 3}
+      propertyPath: m_Color.g
+      value: 0.09183541
+      objectReference: {fileID: 0}
+    - target: {fileID: 5651331755513661955, guid: df702082917dc1644b0295582e94881f, type: 3}
+      propertyPath: m_Color.r
+      value: 0.101960786
       objectReference: {fileID: 0}
     - target: {fileID: 5651331755513661955, guid: df702082917dc1644b0295582e94881f, type: 3}
       propertyPath: m_RaycastTarget

@@ -22,6 +22,10 @@ public class CarouselManager : MonoBehaviour
         [HideInInspector] public GameObject spawnedInstance;
     }
 
+    [Header("Pages")]
+    public GameObject buildUi;
+    public GameObject gameUi;
+
     [Header("Character Spawn")]
     public GameObject characterPrefab;
     private GameObject spawnedCharacter;
@@ -41,10 +45,7 @@ public class CarouselManager : MonoBehaviour
 
     [Header("UI References")]
     public Image displayImage;
-    public TMP_Text categoryTitleText;
-    public TMP_Text levelText;
     public GameObject spawnButton;
-    public GameObject globalNextButton;
 
     [Header("Toggle Preview Settings")]
     public Image previewButtonImage;
@@ -85,8 +86,9 @@ public class CarouselManager : MonoBehaviour
         LoadUserLevelsFromDB();
         UpdateActiveCategory();
 
-        if (globalNextButton != null) globalNextButton.SetActive(false);
         if (previewButtonImage != null) previewButtonImage.color = onColor;
+        if (previewButtonText != null) previewButtonText.text = "Preview: ON";
+        if (gameUi != null) gameUi.SetActive(false);
         if (previewButtonText != null) previewButtonText.text = "Preview: ON";
     }
 
@@ -234,12 +236,11 @@ public class CarouselManager : MonoBehaviour
         {
             if (displayImage != null && activeCategory.levelIcons.Count > activeCategory.currentLevelIndex)
                 displayImage.sprite = activeCategory.levelIcons[activeCategory.currentLevelIndex];
-            categoryTitleText.text = activeCategory.categoryName;
-            levelText.text = "Niveau " + (activeCategory.currentLevelIndex + 1);
             bool alreadySpawned = activeCategory.spawnedInstance != null;
             bool everythingPlaced = AreAllItemsPlaced();
             if (spawnButton != null) spawnButton.SetActive(!alreadySpawned);
-            if (globalNextButton != null) globalNextButton.SetActive(everythingPlaced);
+            if (gameUi != null) gameUi.SetActive(everythingPlaced);
+            if (buildUi != null) buildUi.SetActive(!everythingPlaced);
         }
     }
 
