@@ -1,6 +1,6 @@
 
 ## Réalisé par :
-## Sacha (Création des modèles 3D et page d'accueil, interface de jeu et tcheckup archi)
+## Sacha (Création des modèles 3D et page d'accueil, interface de jeu et tcheckup archi, Audio)
 ## Maxence (Interactions du menu, de la preview et merge, bug fix, logique de jeu et gestion des ressources)
 ## Gael (Gestion des animations et brainstorming, logique de jeu et gestion des ressources)
 ## Amaury (Gestion de la partie "Level up", système d'occlusion, vérification du rendu et readme)
