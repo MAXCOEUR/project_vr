@@ -17,6 +17,8 @@ public class DataHolding : MonoBehaviour
 
     [Header("Configuration des Prix")] public List<UpgradeCost> upgradeCosts = new List<UpgradeCost>();
 
+    public List<int> capacityHouses = new List<int>();
+
     [Header("Stock actuel")] public int woodCount = 0;
     public int rockCount = 0;
     public int humanCount = 0;

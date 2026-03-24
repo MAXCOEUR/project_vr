@@ -11,36 +11,36 @@ public class HouseInteraction : MonoBehaviour
     }
     public void HandleClick()
     {
-    Debug.Log("GameManager: " + GameManager.Instance);
-    Debug.Log("DataHolding: " + DataHolding.Instance);
-    
-    var data = DataHolding.Instance;
+        Debug.Log("GameManager: " + GameManager.Instance);
+        Debug.Log("DataHolding: " + DataHolding.Instance);
+        
+        var data = DataHolding.Instance;
 
-    int level = data.houseCurrentLevel;
+        int level = data.houseCurrentLevel;
 
-    if (level < data.upgradeCosts.Count)
-    {
-        var cost = data.upgradeCosts[level];
-
-        bool canUpgrade = data.woodCount >= cost.woodRequired &&
-                          data.rockCount >= cost.rockRequired;
-
-        if (canUpgrade)
+        Debug.Log($"HouseInteraction: Click détecté sur la maison. Niveau actuel : {level} < {data.upgradeCosts.Count} ?");
+        if (level < data.upgradeCosts.Count)
         {
-            Debug.Log($"Tentative d'amélioration du niveau {level} -> {level + 1}...");
-            data.TrySpendResources();
+            var cost = data.upgradeCosts[level];
 
-            GetComponent<RootModelPrefab>().RefreshVisual();
+            bool canUpgrade = data.woodCount >= cost.woodRequired &&
+                            data.rockCount >= cost.rockRequired;
+
+            if (canUpgrade)
+            {
+                Debug.Log($"Tentative d'amélioration du niveau {level} -> {level + 1}...");
+                data.TrySpendResources();
+
+                GetComponent<RootModelPrefab>().RefreshVisual();
+                return;
+            }
         }
-        else
+        if(data.TrySpendResourcesHuman())
         {
-                data.TrySpendResourcesHuman();
-                Vector3 pos = transform.position + Random.insideUnitSphere;
-                pos.y = transform.position.y;
+            Vector3 pos = transform.position + Random.insideUnitSphere;
+            pos.y = transform.position.y;
 
-                GameManager.Instance.SpawnHuman(pos, transform);
-            
+            GameManager.Instance.SpawnHuman(pos, transform);
         }
     }
-}
 }

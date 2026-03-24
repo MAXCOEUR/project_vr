@@ -37,8 +37,8 @@ public class ResourcesController : MonoBehaviour
 
         woodText.text = DataHolding.Instance.woodCount.ToString();
         rockText.text = DataHolding.Instance.rockCount.ToString();
-        HumanText.text = DataHolding.Instance.humanCount.ToString();
+        HumanText.text = DataHolding.Instance.humanCount.ToString() + "/" + DataHolding.Instance.capacityHouses[DataHolding.Instance.houseCurrentLevel];
         imageHouse.sprite = levelIconsHouse[DataHolding.Instance.houseCurrentLevel];
-        houseLevelText.text = "Niv. " + DataHolding.Instance.houseCurrentLevel.ToString();
+        houseLevelText.text = "Niv. " + (DataHolding.Instance.houseCurrentLevel + 1).ToString();
     }
 }
