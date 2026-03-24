@@ -10,6 +10,8 @@ public class CarouselManager : MonoBehaviour
     // Instance statique pour le Singleton
     public static CarouselManager Instance;
 
+    public GameObject modelRootPrefab; // Un prefab vide qui servira de parent (root) pour les modèles instanciés
+
     [System.Serializable]
     public class CategoryData
     {
@@ -151,14 +153,48 @@ public class CarouselManager : MonoBehaviour
     {
         if (previewModel != null && previewModel.activeSelf && activeCategory.spawnedInstance == null)
         {
-            GameObject prefab = activeCategory.levels[activeCategory.currentLevelIndex];
-            activeCategory.spawnedInstance = Instantiate(prefab, previewModel.transform.position, previewModel.transform.rotation);
-            ARIdentity id = activeCategory.spawnedInstance.AddComponent<ARIdentity>();
+            GameObject newRoot = Instantiate(modelRootPrefab, previewModel.transform.position, previewModel.transform.rotation);
+            newRoot.name = "Root_" + activeCategory.categoryName;
+
+            if (activeCategory.categoryName == "Maison")
+            {
+                RootModelPrefab rootScript = newRoot.GetComponent<RootModelPrefab>();
+                if (rootScript != null)
+                {
+                    rootScript.levels = new List<GameObject>();
+                    foreach (GameObject levelPrefab in activeCategory.levels)
+                    {
+                        GameObject levelInstance = Instantiate(levelPrefab, newRoot.transform);
+                        
+                        levelInstance.transform.localPosition = Vector3.zero;
+                        levelInstance.transform.localRotation = Quaternion.identity;
+                        
+                        levelInstance.SetActive(false);
+                        rootScript.levels.Add(levelInstance);
+                    }
+                    rootScript.RefreshVisual();
+                }
+            }
+            else
+            {
+                GameObject prefabModel = activeCategory.levels[activeCategory.currentLevelIndex];
+                GameObject modelInstance = Instantiate(prefabModel, newRoot.transform);
+                modelInstance.transform.localPosition = Vector3.zero;
+                modelInstance.transform.localRotation = Quaternion.identity;
+            }
+
+            activeCategory.spawnedInstance = newRoot;
+
+            ARIdentity id = newRoot.AddComponent<ARIdentity>();
             id.isShadow = false;
             id.category = activeCategory.categoryName;
-            id.level = activeCategory.currentLevelIndex; // Important pour l'upgrade futur
+            
+            id.level = (activeCategory.categoryName == "Maison") ? DataHolding.Instance.houseCurrentLevel : activeCategory.currentLevelIndex;
+
             previewModel.SetActive(false);
             NextCategory();
+            
+            Debug.Log(newRoot.name + " créé avec succès.");
         }
     }
 
@@ -219,6 +255,7 @@ public class CarouselManager : MonoBehaviour
 
     void LoadUserLevelsFromDB()
     {
+        DataHolding.Instance.houseCurrentLevel = 0;
         houseCategory.currentLevelIndex = 0;
         treeCategory.currentLevelIndex = 0;
         rockCategory.currentLevelIndex = 0;

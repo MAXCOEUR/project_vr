@@ -6,7 +6,6 @@ public class DataHolding : MonoBehaviour
 {
     public static DataHolding Instance;
 
-    // On crée une petite structure pour définir un "Prix"
     [System.Serializable]
     public struct UpgradeCost
     {
@@ -15,14 +14,17 @@ public class DataHolding : MonoBehaviour
     }
 
     [Header("Configuration des Prix")]
-    // Cette liste apparaîtra dans l'inspecteur : Element 0 = Niveau 0 vers 1, etc.
     public List<UpgradeCost> upgradeCosts = new List<UpgradeCost>();
 
     [Header("Stock actuel")]
     public int woodCount = 0;
     public int rockCount = 0;
+    
+    [Header("Progression")]
+    public int houseCurrentLevel = 0;
 
     public static event Action OnResourcesChanged;
+    public static event Action OnUpdateHouse;
 
     void Awake()
     {
@@ -47,10 +49,15 @@ public class DataHolding : MonoBehaviour
 
     public bool TrySpendResources(int currentLevel)
     {
-        // Sécurité : on vérifie si le niveau existe dans notre liste de prix
+        if (currentLevel != houseCurrentLevel)
+        {
+            Debug.LogWarning($"Tentative d'amélioration du niveau {currentLevel} alors que le niveau actuel est {houseCurrentLevel}. Annulation.");
+            return false;
+        }
+
         if (currentLevel >= upgradeCosts.Count)
         {
-            Debug.LogError("Pas de prix défini pour le niveau " + currentLevel);
+            Debug.LogError("Niveau max atteint ou pas de prix défini pour le niveau " + currentLevel);
             return false;
         }
 
@@ -60,8 +67,12 @@ public class DataHolding : MonoBehaviour
         {
             woodCount -= cost.woodRequired;
             rockCount -= cost.rockRequired;
-            Debug.Log($"Amélioration Niveau {currentLevel} -> {currentLevel + 1} réussie !");
+            
+            houseCurrentLevel++;
+
+            Debug.Log($"Amélioration Niveau {currentLevel} -> {houseCurrentLevel} réussie !");
             OnResourcesChanged?.Invoke();
+            OnUpdateHouse?.Invoke();
             return true;
         }
 
