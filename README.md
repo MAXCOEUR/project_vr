@@ -1,9 +1,9 @@
 
 ## Réalisé par :
-## Sacha (Création des modèles et page d'accueil)
-## Maxence (Gestion du menu, de la preview et merge)
-## Gael (Gestion des animations)
-## Amaury (Gestion de la partie "Level up" et readme)
+## Sacha (Création des modèles et page d'accueil, tcheckup archi)
+## Maxence (Gestion du menu, de la preview et merge, bug fix)
+## Gael (Gestion des animations et brainstorming)
+## Amaury (Gestion de la partie "Level up", des mesh pour les obstacles, vérification du rendu et readme)
 
 Le projet "Arc Builder Clicker" est un projet AR qui a pour but de faire apparaître un village, composé d'une maison, d'un arbre et d'un rocher. Le joueur pourra cliquer sur l'arbre pour récupérer du bois et sur la pierre pour ensuite améliorer la maison. Il y a en tout 3 niveaux de maisons dans le jeu, le niveau 1, celui de base, et les deux disponibles après améliorations.<br/>
 Le joueur est limité qu'à un arbre et qu'une roche, et une seule maison. Ce dernier peut poser les structures dans l'ordre de son choix. 
