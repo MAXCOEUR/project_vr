@@ -9,7 +9,7 @@ Le projet "Arc Builder Clicker" est un projet AR qui a pour but de faire appara�
 Le joueur est limité qu'à un arbre et qu'une roche, et une seule maison. Ce dernier peut poser les structures dans l'ordre de son choix. 
 En cliquant sur la maison, si il n'est pas en mesure de l'améliorer, il fera spawn un villagois. Un villageois va ensuite se rendre vers la pierre ou le bois, et récupérer toutes les x secondes des matériaux. Il n'y a pas de limitation au nombre de villagoies qui peuvent spawn, mais à l'instant où le joueur a un minimum de 3 villagoies, un ours apparaîtra pour les manger. En cliquant sur l'ours, il mourra et pendant x secondes, ce dernier ne sera plus là.
 
-##L'application vient avec un système d'occlusion compatible iphone et android permettant de cacher les éléments virtuels dans l'environnement
+## L'application vient avec un système d'occlusion compatible iphone et android permettant de cacher les éléments virtuels dans l'environnement
 
 ## Les 2 niveaux supérieurs pour la maison demandent :
 
