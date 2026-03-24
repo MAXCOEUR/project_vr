@@ -65,15 +65,12 @@ public class HouseInteraction : MonoBehaviour
         }
         else
         {
-            if (data.woodCount > 0)
-            {
-                data.woodCount--;
-
+                data.TrySpendResourcesHuman();
                 Vector3 pos = transform.position + Random.insideUnitSphere;
                 pos.y = transform.position.y;
 
                 GameManager.Instance.SpawnHuman(pos, transform);
-            }
+            
         }
     }
 }

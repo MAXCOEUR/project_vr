@@ -12,13 +12,31 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> humans = new List<GameObject>();
     private GameObject currentBear;
+    public List<GameObject> trees = new List<GameObject>();
+    public List<GameObject> rocks = new List<GameObject>();
+
+    public int houseCapacity = 3;
+    private int currentInHouse = 0;
 
     void Awake()
     {
         Instance = this;
     }
 
-    // 🧍 Ajouter humain
+
+    public bool HasBear()
+    {
+        return currentBear != null;
+    }
+
+    public bool TryEnterHouse()
+    {
+        if (currentInHouse >= houseCapacity) return false;
+
+        currentInHouse++;
+        return true;
+    }
+
     public void SpawnHuman(Vector3 position, Transform house)
     {
         GameObject human = Instantiate(humanPrefab, position, Quaternion.identity);
@@ -31,7 +49,6 @@ public class GameManager : MonoBehaviour
 
         humans.Add(human);
 
-        // 👇 spawn ours si 3 humains
         if (humans.Count >= 3 && currentBear == null)
         {
             StartCoroutine(SpawnBearWithDelay());

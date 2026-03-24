@@ -80,4 +80,21 @@ public class DataHolding : MonoBehaviour
         Debug.Log($"Manque de ressources. Besoin de {cost.woodRequired} bois et {cost.rockRequired} roches.");
         return false;
     }
+
+    public bool TrySpendResourcesHuman()
+    {
+ 
+
+
+        if (woodCount >= 1)
+        {            
+            woodCount -= 1;
+
+            OnResourcesChanged?.Invoke();
+            return true;
+        }
+
+        
+        return false;
+    }
 }
