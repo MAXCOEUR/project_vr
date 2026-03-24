@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class RootModelPrefab : MonoBehaviour
 {
-    // Liste remplie par CarouselManager
     public List<GameObject> levels;
 
     void OnEnable()
@@ -37,17 +36,14 @@ public class RootModelPrefab : MonoBehaviour
 
     void SetupLevel(GameObject level)
     {
-        // 🔧 Ajouter collider si absent
         Collider col = level.GetComponent<Collider>();
         if (col == null)
         {
             col = level.AddComponent<BoxCollider>();
         }
 
-        // 🔧 Ajuster collider (optionnel mais utile)
         col.isTrigger = false;
 
-        // 🔧 Ajouter relay de clic
         HouseClickRelay relay = level.GetComponent<HouseClickRelay>();
         if (relay == null)
         {

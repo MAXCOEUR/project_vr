@@ -30,10 +30,6 @@ public class Bounceclicked : MonoBehaviour
                         {
                             DataHolding.Instance.AddResource(identity.category, 1);
                         }
-                        else if (identity.category == "Maison")
-                        {
-                            DataHolding.Instance.TrySpendResources(DataHolding.Instance.houseCurrentLevel);
-                        }
 
                         if (anim != null) anim.SetTrigger("Bounceclicked");
                     }

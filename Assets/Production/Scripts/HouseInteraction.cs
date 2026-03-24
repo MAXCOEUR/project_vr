@@ -28,7 +28,6 @@ public class HouseInteraction : MonoBehaviour
         else
         {
              Debug.Log(" IHHHHHHH");
-            // ❌ pas upgrade → spawn humain
             if (data.woodCount > 0)
             {
                 data.woodCount--;
