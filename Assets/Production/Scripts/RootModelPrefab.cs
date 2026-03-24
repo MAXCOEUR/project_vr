@@ -3,11 +3,18 @@ using UnityEngine;
 
 public class RootModelPrefab : MonoBehaviour
 {
-    // Cette liste sera remplie par le CarouselManager au moment du Spawn
-    public List<GameObject> levels; 
+    // Liste remplie par CarouselManager
+    public List<GameObject> levels;
 
-    void OnEnable() { DataHolding.OnUpdateHouse += RefreshVisual; }
-    void OnDisable() { DataHolding.OnUpdateHouse -= RefreshVisual; }
+    void OnEnable()
+    {
+        DataHolding.OnUpdateHouse += RefreshVisual;
+    }
+
+    void OnDisable()
+    {
+        DataHolding.OnUpdateHouse -= RefreshVisual;
+    }
 
     public void RefreshVisual()
     {
@@ -15,9 +22,36 @@ public class RootModelPrefab : MonoBehaviour
 
         int currentLv = DataHolding.Instance.houseCurrentLevel;
 
-        for(int i = 0; i < levels.Count; i++)
+        for (int i = 0; i < levels.Count; i++)
         {
-            levels[i].SetActive(i == currentLv);
+            bool isActive = (i == currentLv);
+
+            levels[i].SetActive(isActive);
+
+            if (isActive)
+            {
+                SetupLevel(levels[i]);
+            }
+        }
+    }
+
+    void SetupLevel(GameObject level)
+    {
+        // 🔧 Ajouter collider si absent
+        Collider col = level.GetComponent<Collider>();
+        if (col == null)
+        {
+            col = level.AddComponent<BoxCollider>();
+        }
+
+        // 🔧 Ajuster collider (optionnel mais utile)
+        col.isTrigger = false;
+
+        // 🔧 Ajouter relay de clic
+        HouseClickRelay relay = level.GetComponent<HouseClickRelay>();
+        if (relay == null)
+        {
+            relay = level.AddComponent<HouseClickRelay>();
         }
     }
 }
