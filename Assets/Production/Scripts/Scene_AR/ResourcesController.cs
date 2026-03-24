@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ResourcesController : MonoBehaviour
 {
@@ -7,6 +9,9 @@ public class ResourcesController : MonoBehaviour
     public TextMeshProUGUI woodText;
     public TextMeshProUGUI rockText;
     public TextMeshProUGUI houseLevelText;
+    [Header("New UI Reference")]
+    public Image imageHouse; // L'emplacement de l'image dans ton UI
+    public List<Sprite> levelIconsHouse;
 
     void OnEnable()
     {
@@ -31,6 +36,7 @@ public class ResourcesController : MonoBehaviour
 
         woodText.text = DataHolding.Instance.woodCount.ToString();
         rockText.text = DataHolding.Instance.rockCount.ToString();
+        imageHouse.sprite = levelIconsHouse[DataHolding.Instance.houseCurrentLevel];
         houseLevelText.text = "Niv. " + DataHolding.Instance.houseCurrentLevel.ToString();
     }
 }
