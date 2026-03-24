@@ -1,3 +1,4 @@
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class HouseInteraction : MonoBehaviour
@@ -7,37 +8,6 @@ public class HouseInteraction : MonoBehaviour
     void Start()
     {
         root = GetComponent<RootModelPrefab>();
-    }
-
-    void OnMouseDown()
-    {
-        var data = DataHolding.Instance;
-
-        int level = data.houseCurrentLevel;
-
-        bool upgraded = data.TrySpendResources(level);
-
-        if (upgraded)
-        {
-            Debug.Log(" AHHHHHHHH");
-            data.houseCurrentLevel++;
-
-            if (root != null)
-                root.RefreshVisual();
-        }
-        else
-        {
-             Debug.Log(" IHHHHHHH");
-            if (data.woodCount > 0)
-            {
-                data.woodCount--;
-
-                Vector3 pos = transform.position + Random.insideUnitSphere;
-                pos.y = transform.position.y;
-
-                GameManager.Instance.SpawnHuman(pos, transform);
-            }
-        }
     }
     public void HandleClick()
     {
@@ -57,8 +27,8 @@ public class HouseInteraction : MonoBehaviour
 
         if (canUpgrade)
         {
-            data.TrySpendResources(level);
-            data.houseCurrentLevel++;
+            Debug.Log($"Tentative d'amélioration du niveau {level} -> {level + 1}...");
+            data.TrySpendResources();
 
             GetComponent<RootModelPrefab>().RefreshVisual();
         }

@@ -20,6 +20,7 @@ public class RootModelPrefab : MonoBehaviour
         if (levels == null || levels.Count == 0) return;
 
         int currentLv = DataHolding.Instance.houseCurrentLevel;
+        Debug.Log("RootModelPrefab: RefreshVisual appelé pour le niveau " + currentLv);
 
         for (int i = 0; i < levels.Count; i++)
         {

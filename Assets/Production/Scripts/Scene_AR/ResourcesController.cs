@@ -8,8 +8,9 @@ public class ResourcesController : MonoBehaviour
     [Header("Textes UI")]
     public TextMeshProUGUI woodText;
     public TextMeshProUGUI rockText;
+    public TextMeshProUGUI HumanText;
     public TextMeshProUGUI houseLevelText;
-    [Header("New UI Reference")]
+    [Header("New UI Reference")] 
     public Image imageHouse; // L'emplacement de l'image dans ton UI
     public List<Sprite> levelIconsHouse;
 
@@ -36,6 +37,7 @@ public class ResourcesController : MonoBehaviour
 
         woodText.text = DataHolding.Instance.woodCount.ToString();
         rockText.text = DataHolding.Instance.rockCount.ToString();
+        HumanText.text = DataHolding.Instance.humanCount.ToString();
         imageHouse.sprite = levelIconsHouse[DataHolding.Instance.houseCurrentLevel];
         houseLevelText.text = "Niv. " + DataHolding.Instance.houseCurrentLevel.ToString();
     }

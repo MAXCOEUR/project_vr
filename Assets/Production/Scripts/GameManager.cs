@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
         }
 
         humans.Add(human);
+        DataHolding.Instance.AddResource("Human", 1);
 
         if (humans.Count >= 3 && currentBear == null)
         {
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour
     public void RemoveHuman(GameObject human)
     {
         humans.Remove(human);
+        DataHolding.Instance.deadHuman();
     }
 
     public void KillBear(GameObject bear)

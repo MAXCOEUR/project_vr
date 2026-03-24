@@ -19,6 +19,7 @@ public class DataHolding : MonoBehaviour
 
     [Header("Stock actuel")] public int woodCount = 0;
     public int rockCount = 0;
+    public int humanCount = 0;
 
     [Header("Progression")] public int houseCurrentLevel = 0;
 
@@ -43,27 +44,36 @@ public class DataHolding : MonoBehaviour
             rockCount += amount;
             Debug.Log("Roche ajoutée ! Total : " + rockCount);
         }
+        else if (type == "Human")
+        {
+            humanCount += amount;
+            Debug.Log("Humain ajouté ! Total : " + humanCount);
+        }
 
         OnResourcesChanged?.Invoke();
     }
-
-    public bool TrySpendResources(int currentLevel)
+    public bool deadHuman()
     {
-        if (currentLevel != houseCurrentLevel)
+        if (humanCount > 0)
         {
-            Debug.LogWarning(
-                $"Tentative d'amélioration du niveau {currentLevel} alors que le niveau actuel est {houseCurrentLevel}. Annulation.");
+            humanCount--;
+            OnResourcesChanged?.Invoke();
+            return true;
+        }
+        return false;
+    }
+
+    public bool TrySpendResources()
+    {
+        if (houseCurrentLevel >= upgradeCosts.Count)
+        {
+            Debug.LogError("Niveau max atteint ou pas de prix défini pour le niveau " + houseCurrentLevel);
             return false;
         }
 
-        if (currentLevel >= upgradeCosts.Count)
-        {
-            Debug.LogError("Niveau max atteint ou pas de prix défini pour le niveau " + currentLevel);
-            return false;
-        }
+        UpgradeCost cost = upgradeCosts[houseCurrentLevel];
 
-        UpgradeCost cost = upgradeCosts[currentLevel];
-
+        Debug.Log($"houseCurrentLevel {houseCurrentLevel}");
         if (woodCount >= cost.woodRequired && rockCount >= cost.rockRequired)
         {
             woodCount -= cost.woodRequired;
@@ -71,7 +81,7 @@ public class DataHolding : MonoBehaviour
 
             houseCurrentLevel++;
 
-            Debug.Log($"Amélioration Niveau {currentLevel} -> {houseCurrentLevel} réussie !");
+            Debug.Log($"Amélioration Niveau {houseCurrentLevel - 1} -> {houseCurrentLevel} réussie !");
             OnResourcesChanged?.Invoke();
             OnUpdateHouse?.Invoke();
             return true;
