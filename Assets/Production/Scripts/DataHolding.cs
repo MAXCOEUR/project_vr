@@ -6,7 +6,8 @@ public class DataHolding : MonoBehaviour
 {
     public static DataHolding Instance;
 
-public bool housePlaced = false;
+    public bool housePlaced = false;
+
     [System.Serializable]
     public struct UpgradeCost
     {
@@ -14,15 +15,12 @@ public bool housePlaced = false;
         public int rockRequired;
     }
 
-    [Header("Configuration des Prix")]
-    public List<UpgradeCost> upgradeCosts = new List<UpgradeCost>();
+    [Header("Configuration des Prix")] public List<UpgradeCost> upgradeCosts = new List<UpgradeCost>();
 
-    [Header("Stock actuel")]
-    public int woodCount = 0;
+    [Header("Stock actuel")] public int woodCount = 0;
     public int rockCount = 0;
-    
-    [Header("Progression")]
-    public int houseCurrentLevel = 0;
+
+    [Header("Progression")] public int houseCurrentLevel = 0;
 
     public static event Action OnResourcesChanged;
     public static event Action OnUpdateHouse;
@@ -45,6 +43,7 @@ public bool housePlaced = false;
             rockCount += amount;
             Debug.Log("Roche ajoutée ! Total : " + rockCount);
         }
+
         OnResourcesChanged?.Invoke();
     }
 
@@ -52,7 +51,8 @@ public bool housePlaced = false;
     {
         if (currentLevel != houseCurrentLevel)
         {
-            Debug.LogWarning($"Tentative d'amélioration du niveau {currentLevel} alors que le niveau actuel est {houseCurrentLevel}. Annulation.");
+            Debug.LogWarning(
+                $"Tentative d'amélioration du niveau {currentLevel} alors que le niveau actuel est {houseCurrentLevel}. Annulation.");
             return false;
         }
 
@@ -68,7 +68,7 @@ public bool housePlaced = false;
         {
             woodCount -= cost.woodRequired;
             rockCount -= cost.rockRequired;
-            
+
             houseCurrentLevel++;
 
             Debug.Log($"Amélioration Niveau {currentLevel} -> {houseCurrentLevel} réussie !");
