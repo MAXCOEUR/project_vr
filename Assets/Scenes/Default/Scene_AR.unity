@@ -1134,6 +1134,7 @@ MonoBehaviour:
     rockRequired: 5
   - woodRequired: 20
     rockRequired: 15
+  capacityHouses: 050000000a00000014000000
   woodCount: 0
   rockCount: 0
   humanCount: 0

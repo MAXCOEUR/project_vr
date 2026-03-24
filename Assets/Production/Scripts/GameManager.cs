@@ -14,8 +14,6 @@ public class GameManager : MonoBehaviour
     private GameObject currentBear;
     public List<GameObject> trees = new List<GameObject>();
     public List<GameObject> rocks = new List<GameObject>();
-
-    public int houseCapacity = 3;
     private int currentInHouse = 0;
 
     void Awake()
@@ -31,6 +29,8 @@ public class GameManager : MonoBehaviour
 
     public bool TryEnterHouse()
     {
+        int houseLevel = DataHolding.Instance.houseCurrentLevel;
+        int houseCapacity = DataHolding.Instance.capacityHouses[houseLevel];
         if (currentInHouse >= houseCapacity) return false;
 
         currentInHouse++;
