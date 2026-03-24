@@ -1814,6 +1814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eedcfb6f90e7a44fb74977faa6b1d91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DataHolding
+  housePlaced: 0
   upgradeCosts:
   - woodRequired: 10
     rockRequired: 5
@@ -2529,6 +2530,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2034613034}
     - target: {fileID: 8957884922773161746, guid: a470c5783ea03f1bd85d2d8f81a5ec29, type: 3}
+      propertyPath: bearPrefab
+      value: 
+      objectReference: {fileID: 7962199819078159310, guid: f5b41ba4c79702547a89de7544b80656, type: 3}
+    - target: {fileID: 8957884922773161746, guid: a470c5783ea03f1bd85d2d8f81a5ec29, type: 3}
       propertyPath: nextButton
       value: 
       objectReference: {fileID: 1534889232}
@@ -2540,6 +2545,10 @@ PrefabInstance:
       propertyPath: raycastManager
       value: 
       objectReference: {fileID: 173677096}
+    - target: {fileID: 8957884922773161746, guid: a470c5783ea03f1bd85d2d8f81a5ec29, type: 3}
+      propertyPath: characterPrefab
+      value: 
+      objectReference: {fileID: 1782702501690864755, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
     - target: {fileID: 8957884922773161746, guid: a470c5783ea03f1bd85d2d8f81a5ec29, type: 3}
       propertyPath: modelRootPrefab
       value: 

@@ -1980,7 +1980,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BearChase
   target: {fileID: 0}
-  speed: 1.5
+  speed: 0.4
   attackDistance: 2.5
 --- !u!1 &8002475675295336084
 GameObject:
