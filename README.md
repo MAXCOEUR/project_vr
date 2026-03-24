@@ -1,1 +1,27 @@
-# project_vr
+
+## Réalisé par :
+## Sacha (Création des modèles et page d'accueil)
+## Maxence (Gestion du menu, de la preview et merge)
+## Gael (Gestion des animations)
+## Amaury (Gestion de la partie "Level up" et readme)
+
+Le projet "Arc Builder Clicker" est un projet AR qui a pour but de faire apparaître un village, composé d'une maison, d'un arbre et d'un rocher. Le joueur pourra cliquer sur l'arbre pour récupérer du bois et sur la pierre pour ensuite améliorer la maison. Il y a en tout 3 niveaux de maisons dans le jeu, le niveau 1, celui de base, et les deux disponibles après améliorations.<br/>
+Le joueur est limité qu'à un arbre et qu'une roche, et une seule maison. Ce dernier peut poser les structures dans l'ordre de son choix. 
+
+## Les 2 niveaux supérieurs pour la maison demandent :
+
+### Level 2 :
+10 bois
+5 roches
+
+### Level 3:
+20 bois
+15 roches
+
+Nous avions choisi de partir sur la AR plutôt que la VR, car plus tard nous serons probablement plus amenés à travailler avec cette technologie que la VR, mais aussi car cette dernière nous inspire plus sur les possibilités.
+
+# Difficultés rencontrées :
+Gestion des scripts et interactions dans Unity <br/>
+Init du projet propre <br/>
+Gestion des animations <br/>
+Gestion des merge, push, conflict etc... <br/>
