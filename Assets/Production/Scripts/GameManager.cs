@@ -10,8 +10,14 @@ public class GameManager : MonoBehaviour
     public GameObject humanPrefab;
     public GameObject bearPrefab;
 
+    [Header("Bear Spawn Settings")]
+    public float bearSpawnDelayMin = 8f;
+    public float bearSpawnDelayMax = 15f;
+    public int humansRequiredForBear = 3;
+
     private List<GameObject> humans = new List<GameObject>();
     private GameObject currentBear;
+
     public List<GameObject> trees = new List<GameObject>();
     public List<GameObject> rocks = new List<GameObject>();
 
@@ -23,18 +29,35 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-
-    public bool HasBear()
+    void Start()
     {
-        return currentBear != null;
+        StartCoroutine(BearSpawnLoop());
     }
 
-    public bool TryEnterHouse()
+    IEnumerator BearSpawnLoop()
     {
-        if (currentInHouse >= houseCapacity) return false;
+        while (true)
+        {
+            float wait = Random.Range(bearSpawnDelayMin, bearSpawnDelayMax);
+            yield return new WaitForSeconds(wait);
 
-        currentInHouse++;
-        return true;
+            humans.RemoveAll(h => h == null);
+
+            if (currentBear == null && humans.Count >= humansRequiredForBear)
+            {
+                Vector3 pos = humans[0].transform.position + new Vector3(3f, 0, 3f);
+
+                currentBear = Instantiate(bearPrefab, pos, Quaternion.identity);
+
+                BearAI ai = currentBear.GetComponent<BearAI>();
+                if (ai != null)
+                {
+                    ai.SetTargets(humans);
+                }
+
+                Debug.Log("🐻 Ours spawn !");
+            }
+        }
     }
 
     public void SpawnHuman(Vector3 position, Transform house)
@@ -49,29 +72,6 @@ public class GameManager : MonoBehaviour
 
         humans.Add(human);
         DataHolding.Instance.AddResource("Human", 1);
-
-        if (humans.Count >= 3 && currentBear == null)
-        {
-            StartCoroutine(SpawnBearWithDelay());
-        }
-    }
-
-    IEnumerator SpawnBearWithDelay()
-    {
-        yield return new WaitForSeconds(Random.Range(2f, 5f));
-
-        if (currentBear == null && humans.Count > 0)
-        {
-            Vector3 pos = humans[0].transform.position + new Vector3(3f, 0, 3f);
-
-            currentBear = Instantiate(bearPrefab, pos, Quaternion.identity);
-
-            BearAI ai = currentBear.GetComponent<BearAI>();
-            if (ai != null)
-            {
-                ai.SetTargets(humans);
-            }
-        }
     }
 
     public void RemoveHuman(GameObject human)
@@ -82,7 +82,27 @@ public class GameManager : MonoBehaviour
 
     public void KillBear(GameObject bear)
     {
-        Destroy(bear);
-        currentBear = null;
+        if (bear == currentBear)
+        {
+            Destroy(currentBear);
+            currentBear = null;
+            Debug.Log("🐻 Ours tué → respawn plus tard");
+        }
+        else
+        {
+            Destroy(bear);
+        }
+    }
+
+    public bool HasBear()
+    {
+        return currentBear != null;
+    }
+    public bool TryEnterHouse()
+    {
+        if (currentInHouse >= houseCapacity) return false;
+
+        currentInHouse++;
+        return true;
     }
 }
